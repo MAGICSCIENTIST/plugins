@@ -1,0 +1,146 @@
+<div id="legislation-context" class="context">
+        <div>
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 nopadding">
+                <!--左侧树-->
+                <div class="col-lg-2 col-sm-2 col-md-2 col-xs-12 nopadding" style="position:relative">
+                    <div class="law_tree">
+                        <ul class="law_ul"></ul>
+                    </div>
+                </div>
+                <!--右侧展示内容-->
+                <div class="col-lg-10 col-sm-10 col-md-10 col-xs-12 nopadding">
+                    <div id="law_context" class="law_context">
+                        <div id="rightContentDiv">
+                            <div id="BIAOTIVIEW"></div>
+                            <div id="jianjiediv">
+                                <label>简介：</label>
+                                <div id="JIANJIEVIEW">
+
+                                </div>
+                            </div>
+                            <div class="row basic-info">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                                    <div class="basicInfo-item name">类型</div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="basicInfo-item value" id="LEIXINGVIEW"></div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                                    <div class="basicInfo-item name">来源</div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="basicInfo-item value" id="LAIYUANVIEW"></div>
+                                </div>
+                            </div>
+                            <div class="row basic-info">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                                    <div class="basicInfo-item name">发文字号</div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="basicInfo-item value" id="FAWEN_ZHVIEW"></div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                                    <div class="basicInfo-item name">颁发单位</div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="basicInfo-item value" id="BANFA_DWVIEW"></div>
+                                </div>
+                            </div>
+                            <div class="row basic-info">
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                                    <div class="basicInfo-item name">颁发时间</div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="basicInfo-item value" id="BANFA_SJVIEW"></div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                                    <div class="basicInfo-item name">备注</div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                    <div class="basicInfo-item value" id="BEIZHUVIEW"></div>
+                                </div>
+                            </div>
+                            <div style="clear:both;">
+                            </div>
+                            <div id="NEIRONGVIEW">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="tool_list">
+            <li>
+                <div class="widgetToolbar">
+                    <dl>
+                        <dt class="tool" id="add_news" title="添加">
+                            <i class="tool_icon icon-plus"></i>
+                        </dt>
+                    </dl>
+                </div>
+
+            </li>
+            <li>
+                <div class="widgetToolbar">
+                    <dl>
+                        <dt class="tool" id="edit_news" title="编辑">
+                            <i class="tool_icon icon-edit"></i>
+                        </dt>
+                    </dl>
+                </div>
+            </li>
+            <li>
+                <div class="widgetToolbar">
+                    <dl>
+                        <dt class="tool" id="delete_news" title="删除">
+                            <i class="tool_icon icon-close"></i>
+                        </dt>
+                    </dl>
+                </div>
+            </li>
+        </ul>
+        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 nopadding">
+            <div class="law_mark">
+                <div class="editor">
+                    <div class="title_bar">
+                        法律法规详情
+                        <div class="close">X</div>
+                    </div>
+                    <from class="news">
+                        <div class="list_row">
+                            <div>标题</div>
+                            <input type="text" name="BIAOTI" />
+                            <div>简介</div>
+                            <input type="text" name="JIANJIE" />
+                            <div>类型</div>
+                            <input type="text" name="LEIXING" />
+                        </div>
+                        <div class="list_row">
+                            <div>来源</div>
+                            <input type="text" name="LAIYUAN" />
+                            <div>发文字号</div>
+                            <input type="text" name="FAWEN_ZH" />
+                            <div>颁发单位</div>
+                            <input type="text" name="BANFA_DW" />
+                        </div>
+                        <div class="list_row">
+                            <div>颁发时间</div>
+                            <input type="text" name="BANFA_SJ" />
+                            <div>失效时间</div>
+                            <input type="text" name="SHIXIAO_SJ" />
+                            <div>备注</div>
+                            <input type="text" name="BEIZHU" />
+                        </div>
+                        <div style="height:30px;line-height:30px;font-size:14px;padding-left:20px;">内容</div>
+                        <script type="text/plain" id="law_Editor" name="NEIRONG">
+                        </script>
+                    </from>
+                    <div class="tool_bar">
+                        <button class="cancel">取消</button>
+                        <button class="sure">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+    </div>

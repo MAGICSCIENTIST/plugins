@@ -1,0 +1,36 @@
+{
+  "name": "plugins",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browser": "browser-sync start --server --directory  --port 50032 --files \"**/*.css, **/*.html , **/*.js, !dist/** \"",
+    "build-dev": "webpack --watch",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MAGICSCIENTIST/plugins.git"
+  },
+  "author": "magicscientistggg <magicscientistggg@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MAGICSCIENTIST/plugins/issues"
+  },
+  "homepage": "https://github.com/MAGICSCIENTIST/plugins#readme",
+  "devDependencies": {
+    "browser-sync": "^2.24.6",
+    "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^1.0.0",
+    "file-loader": "^1.1.11",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.22.1",
+    "url-loader": "^1.0.1",
+    "webpack-dev-server": "^3.1.5"
+  },
+  "dependencies": {
+    "ol": "^5.1.3"
+  }
+}

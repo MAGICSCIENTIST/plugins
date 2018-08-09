@@ -1,72 +1,51 @@
 /**工厂类 生成其他组件 */
 
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as anonymous module.
-        define('viewer', ['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // Node / CommonJS
-        factory(require('jquery'));
-    } else {
-        // Browser globals.
-        factory(jQuery);
-    }
-}(function ($) {
+var defOpt = {
+}
 
-    //your code
+var factory = {
+    options: defOpt,
+    plugins: {}
+};
 
-    var defOpt = {
-    }
+var _self = factory;
 
-    var factory = {
-        options: defOpt,
-        plugins: []
-    };
+factory.getPlugin = function (name) {
 
-
-    factory.addPlugin = function (name, plugin, options) {
-        if (this.plugins.filter(x => x.name === name).length > 0) {
-            throw "重复注册的ID " + name;
-        }
-
-        this.plugins.add(
-            {
-                name: name,
-                plugin: plugin,
-                options: options
+    debugger
+    for (const key in _self.plugins) {
+        if (object.hasOwnProperty(key)) {
+            const element = object[key];
+            if (element.name === name) {
+                return element
             }
-        );
-
-
-    }
-
-    factory.create = function (name, options) {
-
-        var res = factory.plugins.filter(x=>x.name)[0]
-        if(res){
-             return res.plugin(options);
-        }else{
-            return undefined
         }
-
     }
+}
 
+factory.addPlugin = function (name, plugin) {
 
-
-
-
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as anonymous module.
-        define('viewer', ['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // Node / CommonJS
-        factory(require('jquery'));
-    } else {
-        // Browser globals.
-        if (!window.skyMapPlugins) {
-            window.skyMapPlugins = {};
-        }
-        window.skyMapPluginsFactory = factory;
+    if (_self.getPlugin(name)) {
+        throw "重复注册的ID " + name;
     }
-}))
+    _self.plugins[name] = plugin;
+
+}
+
+// factory.create = function (name, options) {
+
+//     var res = factory.plugins.filter(x => x.name)[0]
+//     if (res) {
+//         return res.plugin(options);
+//     } else {
+//         return undefined
+//     }
+
+// }
+
+
+
+
+window.skyMapPluginsFactory = _self;
+
+module.exports = _self
