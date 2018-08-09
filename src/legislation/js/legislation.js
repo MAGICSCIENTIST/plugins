@@ -19,11 +19,17 @@ import httpRequestHelper from '../../alice/common/httpRequestHelper.js'
 
 var defOpt = {
     container: "#legislation",
+    serverUrlType: "split", //测试用,所有url分开写
+    templates:{
+        lawItemTemplate:""
+    },
     serverUrl: {
-        urlBase: "http://101.200.232.210:8020/asmx/",
-        getLaws: defOpt.serverUrl.urlBase + "Law.asmx/GetLawByKey",
-        addLaw: defOpt.serverUrl.urlBase + "Law.asmx/DeleteLawByKey",
-        editLaw: defOpt.serverUrl.urlBase + "",
+        urlBase: "http://101.200.232.210:8020/asmx/Law.asmx/",
+        getLaws: defOpt.serverUrl.urlBase + "GetLawList",
+        getLawDetail: defOpt.serverUrl.urlBase + "GetLawByKey",
+        delLaw: defOpt.serverUrl.urlBase + "DeleteLawByKey",
+        addLaw: defOpt.serverUrl.urlBase + "AddLaw",
+        updateLaw: defOpt.serverUrl.urlBase + "UpdateLaw",
 
     }
 
@@ -41,9 +47,30 @@ function _bindEvents($con) {
 }
 
 //加载列表
-function _loadLaws() {
+function _loadLaws(params) {
     var opt = this.options;
-    this.httpRequestHelper.postRequest(opt.url, )
+    var oper;
+    if (opt.serverUrlType === "combine") {
+    } else {
+        oper = this.httpRequestHelper.postRequest(opt.serverUrl.getLaws, params)
+    }
+    return oper.then(function (result) {
+        debugger
+        var data = result.data;
+        //$(result).find("string").each(function (i) {
+
+        //    data = $.parseJSON($(this).text());
+
+        //});
+        var str = "";
+        for (var i = 0; i < data.length; i++) {
+            str += "<li ><span code='" + data[i].ID + "'>" + data[i].BIAOTI + "</span></li>"
+        }
+        $("ul.law_ul").html(str);
+        //默认打开第一个
+        a ? $("span[code=" + a + "]").parent().trigger("click") : $(".law_ul span").first().trigger("click");
+    })
+
 }
 
 //检查各种设置项正确
@@ -73,9 +100,10 @@ legislation.init = function (options) {
         checkOptions: function () {
             _checkOptions.call(this, this.options)
         },
-        loadLaws: function () {
-            _loadLaws.call(this)
+        loadLaws: function (params) {
+            return _loadLaws.call(this, params)
         }
+
 
     }
 
@@ -92,6 +120,9 @@ legislation.init = function (options) {
     returnobj.loadLaws();
 
     return returnobj;
+
+
+
 
 
     // var obj;//保存法律详情
