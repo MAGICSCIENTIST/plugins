@@ -1,7 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
-const r = require('babel-plugin-transform-runtime')
+
 
 module.exports = {
     target: "web",
@@ -49,8 +49,19 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env'],
-                        // plugins: ['@babel/transform-runtime']
+                        // presets: ['@babel/preset-env'],
+                        presets: [
+                            ['@babel/preset-env',{
+                                
+                            }]
+                        ],
+                        plugins: [
+                            ['@babel/transform-runtime',{
+                                "corejs": 2,
+                                "regenerator": true
+                            }]
+                        ]
+                          
                     }
                 }
             }
