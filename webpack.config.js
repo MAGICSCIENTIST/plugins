@@ -1,5 +1,6 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
@@ -13,11 +14,17 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "dist"), // string
-        filename: "[name].js",
+        filename: "[name]/[name].js",
         publicPath: '/'
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: "[name].css",
+            chunkFilename: "[id].css"
+        })
         // new HtmlWebpackPlugin({
         //     title: 'Output Management'
         // })
@@ -30,9 +37,20 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    'style-loader',
-                    'css-loader'
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            // you can specify a publicPath here
+                            // by default it use publicPath in webpackOptions.output
+                            publicPath: '../'
+                        }
+                    },
+                    "css-loader"
                 ]
+                // use: [
+                //     'style-loader',
+                //     'css-loader'
+                // ]
             },
             {
                 test: /\.(html)$/,
@@ -51,17 +69,17 @@ module.exports = {
                     options: {
                         // presets: ['@babel/preset-env'],
                         presets: [
-                            ['@babel/preset-env',{
-                                
+                            ['@babel/preset-env', {
+
                             }]
                         ],
                         plugins: [
-                            ['@babel/transform-runtime',{
+                            ['@babel/transform-runtime', {
                                 "corejs": 2,
                                 "regenerator": true
                             }]
                         ]
-                          
+
                     }
                 }
             }

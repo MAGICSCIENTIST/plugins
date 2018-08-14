@@ -96,9 +96,10 @@ function _bindEvents($con) {
 
 //加载列表
 function _loadLaws() {
-    var opt = this.options;
-    var params = _getParams.call(this, opt.params.getLaws)
-    return _getLoader.call(this, opt.serverUrl.getLaws, params)
+    var self = this;
+    var opt = self.options;
+    var params = _getParams.call(self, opt.params.getLaws)
+    return _getLoader.call(self, opt.serverUrl.getLaws, params)
         .catch(x => {
             debugger
             alertHelper.error("初始化失败", x)
@@ -114,12 +115,12 @@ function _loadLaws() {
             var str = "";
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
-                opt.templates.lawItemTemplate.format({
+                str += opt.templates.lawItemTemplate.format({
                     code: item.ID,
                     name: item.BIAOTI
                 })
             }
-            opt.$con.find("ul.law_ul").html(str);
+            self.$con.find("ul.law_ul").html(str);
             //默认打开第一个
             // a ? $("span[code=" + a + "]").parent().trigger("click") : $(".law_ul span").first().trigger("click");
         })
@@ -168,11 +169,12 @@ function _checkOptions(options) {
 }
 
 //初始化dom
-function _iniDom(opt) {
-    if (!opt.$con) {
+function _iniDom() {
+    if (!this || !this.$con) {
+        console.log('初始化未成功')
         return
     }
-    opt.$con.append(__html);
+    this.$con.append(__html);
 }
 
 
@@ -273,7 +275,8 @@ legislation.init = function (selector, options) {
     };
 
     //初始化dom
-    _iniDom(returnobj.options);
+    debugger
+    _iniDom.call(returnobj);
 
     //绑定事件
     _bindEvents.call(returnobj, $con)

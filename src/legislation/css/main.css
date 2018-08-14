@@ -1,0 +1,265 @@
+/*#region 法律法规 */
+
+div#law_Editor {
+    position: relative;
+}
+
+div#edui1_toolbarbox {
+    position: fixed;
+    top: 346px;
+    width: 900px;
+    z-index: 1000;
+}
+
+div#edui1_iframeholder {
+    margin-top: 60px;
+}
+
+#BIAOTIVIEW {
+    font-family: '微软雅黑';
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+}
+
+.basicinfo {
+    width: 25%;
+    float: left;
+    display: inline-table;
+}
+
+    .basicinfo div {
+        display: inline;
+    }
+
+
+/*****左侧树******/
+
+div.law_tree {
+    padding: 10px 20px;
+    border: 1px solid #2d4965;
+    border-radius: 5px;
+    font-size: 13px;
+    position: fixed;
+    width: 16%;
+}
+
+@media screen and (max-width: 768px) {
+    div.law_tree {
+        width: 100%;
+        position: static;
+    }
+}
+
+ul.law_ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+    ul.law_ul li {
+        min-height: 30px;
+        /*width:250px;*/
+        padding-top: 7px;
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
+
+        ul.law_ul li.active {
+            background-color: #7a8f9d;
+        }
+
+        ul.law_ul li > a {
+            display: inline-block;
+            text-align: left;
+        }
+
+
+/*****右侧展示内容******/
+
+div.law_context {
+    border: 1px solid #2d4965;
+    border-radius: 5px;
+}
+
+div.basic-info {
+    /*margin: 20px 20px 10px 20px;*/
+    *overflow: hidden;
+    border-bottom: 1px dashed #999;
+}
+
+.basic-info .basicInfo-block {
+    width: 45%;
+    float: left;
+}
+
+.basic-info .basicInfo-item {
+    line-height: 26px;
+    display: block;
+    padding: 0;
+    margin: 0;
+    float: left;
+}
+
+    .basic-info .basicInfo-item.name {
+        width: 100%;
+        padding: 0 5px 0 12px;
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        color: #999;
+    }
+
+    .basic-info .basicInfo-item.value {
+        zoom: 1;
+        color: #fff;
+        width: 100%;
+        float: right;
+        position: relative;
+        font-size: small;
+    }
+
+.cmn-clearfix {
+    *zoom: 1;
+}
+
+    .cmn-clearfix:after {
+        content: '\0020';
+        display: block;
+        height: 0;
+        font-size: 0;
+        clear: both;
+        overflow: hidden;
+        visibility: hidden;
+    }
+
+.falvfaguiitem {
+    font-size: 13px;
+}
+
+#jianjiediv,
+#NEIRONGVIEW {
+    padding-left: 15px;
+    padding-right: 10px;
+}
+
+    #NEIRONGVIEW * {
+        color: white !important;
+    }
+
+div.law_mark {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(16, 21, 29, 0.8);
+    height: 100%;
+    width: 100%;
+    display: none;
+    overflow: hidden;
+}
+
+div.editor {
+    width: 900px;
+    height: 675px;
+    margin: 0px auto;
+    background-color: #2d4965;
+    margin-top: 100px;
+}
+
+div.title_bar {
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+    background-color: #7a8f9d;
+    padding: 0px 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+div.list_row {
+    clear: both;
+}
+
+    div.list_row div.bottom {
+        height: 260px;
+    }
+
+div.close {
+    margin-top: 6px;
+    cursor: pointer;
+    color: #F3F3F3;
+    font-size: 15px;
+}
+
+div.list_row > div {
+    width: 100px;
+    height: 60px;
+    line-height: 60px;
+    display: inline-block;
+    text-align: center;
+}
+
+div.list_row > input {
+    width: 190px;
+    outline: none;
+    display: inline-block;
+    height: 28px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+div.tool_bar > button {
+    outline: none;
+    float: right;
+    width: 60px;
+    background-color: #7a8f9d;
+    height: 30px;
+    text-align: center;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 3px;
+}
+
+ul.tool_list {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    position: fixed;
+    right: 20px;
+    bottom: 40px;
+}
+
+    ul.tool_list li {
+        height: 40px;
+        width: 40px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        position: relative;
+    }
+
+div#law_Editor {
+    color: #000;
+    height: 382px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 0px;
+}
+
+div#edui1 {
+    border-radius: inherit;
+}
+
+div#edui_fixedlayer {
+    color: #000;
+}
+
+
+/*#endregion */
