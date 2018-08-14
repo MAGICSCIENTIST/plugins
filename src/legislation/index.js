@@ -1,5 +1,4 @@
 import a from './js/legislation';
-debugger
 
 
 // var a =1

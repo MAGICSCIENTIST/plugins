@@ -3,6 +3,8 @@ import UE from '../../alice/shim/ueditor.shim.js'
 import __html from '../html/main.html'
 import factory from '../../alice/factory.js'
 import httpRequestHelper from '../../alice/common/httpRequestHelper.js'
+import alertHelper from '../../alice/common/alertHelper.js'
+import * as ___ from '../../alice/common/commonHelper.js'
 
 //父类参数，控制显示效果
 // var options = {
@@ -17,59 +19,141 @@ import httpRequestHelper from '../../alice/common/httpRequestHelper.js'
 
 //私有方法............................................................
 
+
+var curLawObj
+
 var defOpt = {
-    container: "#legislation",
     serverUrlType: "split", //测试用,所有url分开写
-    templates:{
-        lawItemTemplate:""
+    templates: {
+        lawItemTemplate: '<li><span code={code}>{name}</span></li>',
     },
     serverUrl: {
         urlBase: "http://101.200.232.210:8020/asmx/Law.asmx/",
-        getLaws: defOpt.serverUrl.urlBase + "GetLawList",
-        getLawDetail: defOpt.serverUrl.urlBase + "GetLawByKey",
-        delLaw: defOpt.serverUrl.urlBase + "DeleteLawByKey",
-        addLaw: defOpt.serverUrl.urlBase + "AddLaw",
-        updateLaw: defOpt.serverUrl.urlBase + "UpdateLaw",
+        getLaws: "GetLawList",
+        getLawDetail: "GetLawByKey",
+        delLaw: "DeleteLawByKey",
+        addLaw: "AddLaw",
+        updateLaw: "UpdateLaw",
 
+    },
+    params: {
+        getLaws: undefined,
+        getLawDetail: undefined,
+        delLaw: undefined,
+        addLaw: undefined,
+        updateLaw: undefined
     }
 
 }
+
+function _getParams(params, defPar, _argument) {
+    if (!params) {
+        return defPar;
+    }
+    if (typeof params === "function") {
+        var _a = arguments;
+        Array.prototype.shift.call(_a);
+        Array.prototype.shift.call(_a);
+        return params.apply(this, _a);
+    } else {
+        return params;
+    }
+}
+function _getLoader(action, params) {
+    var url;
+    var opt = this.options;
+    if (opt.serverUrlType === "combine") {
+        url = opt.serverUrl.urlBase;
+        params = {
+            action: action,
+            data: params
+        }
+    } else {
+        url = opt.serverUrl.urlBase + action;
+    }
+
+    return httpRequestHelper.postRequest(url, params)
+}
+
 
 function _bindEvents($con) {
+    var self = this;
+    var opt = self.options
     //点击事件触发法律内容改变
-    $con.on('click', '.law_ul li', function () {
-        if (!$(this).hasClass("active")) {
-            $(this).addClass("active");
-            $(this).siblings().removeClass("active");
-            initViewDialog($(this).find("span").attr("code"), $(this).find("span").text());
+    $con.delegate('.law_ul li', 'click', function (e) {
+        var $this = $(this);
+        if (!$this.hasClass("active")) {
+            $this.addClass("active");
+            $this.siblings().removeClass("active");
+
+            _loadDetails.call(self, $this.find("span"));
+            // _initViewDialog(, title);
         }
-    });
+    })
 }
 
+
+
 //加载列表
-function _loadLaws(params) {
+function _loadLaws() {
     var opt = this.options;
-    var oper;
-    if (opt.serverUrlType === "combine") {
-    } else {
-        oper = this.httpRequestHelper.postRequest(opt.serverUrl.getLaws, params)
-    }
-    return oper.then(function (result) {
-        debugger
-        var data = result.data;
-        //$(result).find("string").each(function (i) {
+    var params = _getParams.call(this, opt.params.getLaws)
+    return _getLoader.call(this, opt.serverUrl.getLaws, params)
+        .catch(x => {
+            debugger
+            alertHelper.error("初始化失败", x)
+        })
+        .then(function (result) {
+            debugger
+            var data = result;
+            //$(result).find("string").each(function (i) {
 
-        //    data = $.parseJSON($(this).text());
+            //    data = $.parseJSON($(this).text());
 
-        //});
-        var str = "";
-        for (var i = 0; i < data.length; i++) {
-            str += "<li ><span code='" + data[i].ID + "'>" + data[i].BIAOTI + "</span></li>"
-        }
-        $("ul.law_ul").html(str);
-        //默认打开第一个
-        a ? $("span[code=" + a + "]").parent().trigger("click") : $(".law_ul span").first().trigger("click");
-    })
+            //});
+            var str = "";
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                opt.templates.lawItemTemplate.format({
+                    code: item.ID,
+                    name: item.BIAOTI
+                })
+            }
+            opt.$con.find("ul.law_ul").html(str);
+            //默认打开第一个
+            // a ? $("span[code=" + a + "]").parent().trigger("click") : $(".law_ul span").first().trigger("click");
+        })
+
+}
+
+// 加载详情
+function _loadDetails(selLaw) {
+    var code = selLaw.attr("code");
+    var title = selLaw.text();
+    var opt = this.options;
+    var self = this;
+    var par = _getParams.call(self, opt.params.getLawDetail, { key: code }, selLaw);
+    return _getLoader.call(self, opt.serverUrl.getLawDetail, par)
+        .catch(x => {
+            debugger
+            alertHelper.error("详细信息加载失败", x)
+        })
+        .then(function (result) {
+            debugger
+            $(result).find("string").each(function (i) {
+                curLawObj = $.parseJSON($(this).text());
+            });
+
+            $("#BIAOTIVIEW").html(title);
+            $("#LEIXINGVIEW").html($self.obj.Result[0].LEIXING);
+            $("#LAIYUANVIEW").html($self.obj.Result[0].LAIYUAN);
+            $("#FAWEN_ZHVIEW").html($self.obj.Result[0].FAWEN_ZH);
+            $("#BANFA_DWVIEW").html($self.obj.Result[0].BANFA_DW);
+            $("#BANFA_SJVIEW").html($self.obj.Result[0].BANFA_SJ);
+            $("#BEIZHUVIEW").html($self.obj.Result[0].BEIZHU);
+            $("#JIANJIEVIEW").html($self.obj.Result[0].JIANJIE);
+            $("#NEIRONGVIEW").html(htmlDecode($self.obj.Result[0].NEIRONG));
+        })
 
 }
 
@@ -83,25 +167,100 @@ function _checkOptions(options) {
     return isOk
 }
 
+//初始化dom
+function _iniDom(opt) {
+    if (!opt.$con) {
+        return
+    }
+    opt.$con.append(__html);
+}
+
+
+//请求法律法规信息并在查看界面显示
+function _initViewDialog(falvfaguiid, title) {
+    _getLoader(opt, opt.serverUrl.getLawDetail, op.params.getLawDetail)
+        .catch(err => { debugger })
+        .then(result => {
+            $(result).find("string").each(function (i) {
+                $self.obj = $.parseJSON($(this).text());
+            });
+            $("#BIAOTIVIEW").html(title);
+            $("#LEIXINGVIEW").html($self.obj.Result[0].LEIXING);
+            $("#LAIYUANVIEW").html($self.obj.Result[0].LAIYUAN);
+            $("#FAWEN_ZHVIEW").html($self.obj.Result[0].FAWEN_ZH);
+            $("#BANFA_DWVIEW").html($self.obj.Result[0].BANFA_DW);
+            $("#BANFA_SJVIEW").html($self.obj.Result[0].BANFA_SJ);
+            $("#BEIZHUVIEW").html($self.obj.Result[0].BEIZHU);
+            $("#JIANJIEVIEW").html($self.obj.Result[0].JIANJIE);
+            $("#NEIRONGVIEW").html(htmlDecode($self.obj.Result[0].NEIRONG));
+        })
+    $.ajax({
+        type: 'post',       //post传值方式
+        url: "http://101.200.232.210:8020/asmx/Law.asmx/GetLawByKey",
+        data: { key: falvfaguiid },
+        dataType: 'json',
+        cache: false,
+        dataType: 'xml',
+        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+        success: function (result) { //执行成功后的额操作
+            $(result).find("string").each(function (i) {
+                $self.obj = $.parseJSON($(this).text());
+            });
+
+            $("#BIAOTIVIEW").html(title);
+            $("#LEIXINGVIEW").html($self.obj.Result[0].LEIXING);
+            $("#LAIYUANVIEW").html($self.obj.Result[0].LAIYUAN);
+            $("#FAWEN_ZHVIEW").html($self.obj.Result[0].FAWEN_ZH);
+            $("#BANFA_DWVIEW").html($self.obj.Result[0].BANFA_DW);
+            $("#BANFA_SJVIEW").html($self.obj.Result[0].BANFA_SJ);
+            $("#BEIZHUVIEW").html($self.obj.Result[0].BEIZHU);
+            $("#JIANJIEVIEW").html($self.obj.Result[0].JIANJIE);
+            $("#NEIRONGVIEW").html(htmlDecode($self.obj.Result[0].NEIRONG));
+
+        },
+        error: function (response) { //执行中出错了
+            swal("失败!", "操作失败", "error");
+        }
+    });
+
+}
+
 //私有方法............................................................
+
+
+
 
 // 注册对象
 var legislation = {}
 //main
-legislation.init = function (options) {
+legislation.init = function (selector, options) {
 
-    //TODO: support ele and $ele
-    var $con = $(legislation.options.container)
+
+    var $con;
+    if (typeof selector == "string") {
+        $con = $(selector);
+    } else if (selector instanceof $) {
+        $con = selector;
+    } else {
+        $con = $(selector);
+    }
+
     var _opt = $.extend(true, {}, defOpt, options)
     var returnobj = {
         $con: $con,
         //设置项
         options: _opt,
         checkOptions: function () {
-            _checkOptions.call(this, this.options)
+            return _checkOptions.call(this, this.options)
         },
         loadLaws: function (params) {
-            return _loadLaws.call(this, params)
+            return _loadLaws.call(this)
+        },
+        showLawDetail: function () {
+
+        },
+        destory: function () {
+            return this.options.$con.remove();
         }
 
 
@@ -112,6 +271,9 @@ legislation.init = function (options) {
     if (!returnobj.checkOptions()) {
         return undefined;
     };
+
+    //初始化dom
+    _iniDom(returnobj.options);
 
     //绑定事件
     _bindEvents.call(returnobj, $con)
@@ -167,38 +329,7 @@ legislation.init = function (options) {
         });
     }
     new_list();
-    //请求法律法规信息并在查看界面显示
-    function initViewDialog(falvfaguiid, title) {
-        $.ajax({
-            type: 'post',       //post传值方式
-            url: "http://101.200.232.210:8020/asmx/Law.asmx/GetLawByKey",
-            data: { key: falvfaguiid },
-            dataType: 'json',
-            cache: false,
-            dataType: 'xml',
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            success: function (result) { //执行成功后的额操作
-                $(result).find("string").each(function (i) {
-                    $self.obj = $.parseJSON($(this).text());
-                });
 
-                $("#BIAOTIVIEW").html(title);
-                $("#LEIXINGVIEW").html($self.obj.Result[0].LEIXING);
-                $("#LAIYUANVIEW").html($self.obj.Result[0].LAIYUAN);
-                $("#FAWEN_ZHVIEW").html($self.obj.Result[0].FAWEN_ZH);
-                $("#BANFA_DWVIEW").html($self.obj.Result[0].BANFA_DW);
-                $("#BANFA_SJVIEW").html($self.obj.Result[0].BANFA_SJ);
-                $("#BEIZHUVIEW").html($self.obj.Result[0].BEIZHU);
-                $("#JIANJIEVIEW").html($self.obj.Result[0].JIANJIE);
-                $("#NEIRONGVIEW").html(htmlDecode($self.obj.Result[0].NEIRONG));
-
-            },
-            error: function (response) { //执行中出错了
-                swal("失败!", "操作失败", "error");
-            }
-        });
-
-    }
 
     //初始化时间日期框
     $("input[name='BANFA_SJ']").datetimepicker({ format: 'YYYY-MM-DD' });
@@ -371,11 +502,6 @@ legislation.init = function (options) {
 
     })
 }
-
-legislation.loadLaws = function () {
-
-}
-
 //destory
 legislation.destory = function () {
 
@@ -393,4 +519,4 @@ legislation.destory = function () {
 
 factory.addPlugin("legislation", legislation)
 
-// module.exports = legislation
+module.exports = legislation

@@ -11,8 +11,7 @@ var factory = {
 var _self = factory;
 
 factory.getPlugin = function (name) {
-
-    debugger
+    
     for (const key in _self.plugins) {
         if (object.hasOwnProperty(key)) {
             const element = object[key];
